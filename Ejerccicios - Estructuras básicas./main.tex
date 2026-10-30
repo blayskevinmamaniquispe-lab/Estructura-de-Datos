@@ -1,0 +1,853 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[a4paper, margin=2cm]{geometry}
+\usepackage[spanish]{babel}
+\usepackage{lmodern}
+\usepackage[scaled=0.95]{helvet}
+\usepackage{courier}
+
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, listings}
+\usepackage{hyperref}
+
+% ==========================================
+% PALETA DE COLORES DE ALTO CONTRASTE Y VISIBILIDAD
+% ==========================================
+\definecolor{brandNavy}{RGB}{15, 23, 42}       % Deep Navy Dark
+\definecolor{brandBlue}{RGB}{37, 99, 235}      % Vibrant Blue Accent
+\definecolor{brandCyan}{RGB}{14, 165, 233}     % Cyan Light Accent
+\definecolor{codeBg}{RGB}{248, 250, 252}        % Canvas Soft Light Gray
+\definecolor{codeFrame}{RGB}{203, 213, 225}     % Border Slate Gray
+\definecolor{codeComment}{RGB}{100, 116, 139}   % Muted Comment Text
+\definecolor{codeKeyword}{RGB}{3, 105, 161}     % Deep Teal-Blue Keyword
+\definecolor{codeString}{RGB}{180, 83, 9}       % Warm Amber String
+\definecolor{termBg}{RGB}{15, 23, 42}          % Dark Terminal Canvas
+\definecolor{termBorder}{RGB}{30, 41, 59}      % Terminal Border
+\definecolor{termFg}{RGB}{241, 245, 249}        % Terminal Text Light
+\definecolor{boxTitleBg}{RGB}{30, 58, 138}     % Box Header Dark Blue
+
+% ==========================================
+% CONFIGURACIÓN DE LISTINGS Y TCOLORBOX
+% ==========================================
+\lstdefinestyle{codigo}{
+  language=C++,
+  basicstyle=\small\ttfamily\color{brandNavy},
+  keywordstyle=\bfseries\color{codeKeyword},
+  stringstyle=\color{codeString},
+  commentstyle=\itshape\color{codeComment},
+  numbers=left,
+  numberstyle=\tiny\bfseries\color{codeComment},
+  stepnumber=1,
+  numbersep=10pt,
+  showstringspaces=false,
+  breaklines=true,
+  tabsize=2
+}
+
+% Caja estilizada para código C / C++
+\newtcblisting{codebox}[1][]{
+  toptitle=2mm,
+  bottomtitle=2mm,
+  colback=codeBg,
+  colframe=brandBlue,
+  coltitle=white,
+  fonttitle=\bfseries\small\sffamily,
+  enhanced,
+  attach boxed title to top left={xshift=5mm, yshift=-3mm},
+  boxed title style={colback=brandBlue, arc=2mm},
+  arc=3mm,
+  boxrule=1.2pt,
+  breakable,
+  listing only,
+  listing engine=listings,
+  listing options={style=codigo},
+  #1
+}
+
+% Caja estilizada para simulación de salida de terminal
+\newtcblisting{terminalout}[1][]{
+  toptitle=2mm,
+  bottomtitle=2mm,
+  colback=termBg,
+  colframe=termBorder,
+  colupper=termFg,
+  fontupper=\small\ttfamily,
+  fonttitle=\bfseries\small\sffamily,
+  title={> COMPILACIÓN Y EJECUCIÓN EN CONSOLA},
+  coltitle=white,
+  enhanced,
+  attach boxed title to top left={xshift=5mm, yshift=-3mm},
+  boxed title style={colback=boxTitleBg, arc=2mm},
+  arc=3mm,
+  boxrule=1.2pt,
+  breakable,
+  listing only,
+  listing options={
+    basicstyle=\small\ttfamily\color{termFg},
+    breaklines=true,
+    showstringspaces=false
+  },
+  #1
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=brandBlue,
+    urlcolor=brandBlue,
+    pdftitle={CAPÍTULO I - Solución de ejercicios de programación},
+    pdfautor={Fred Torres-Cruz}
+}
+
+\begin{document}
+
+% ==========================================
+% PORTADA / COVER PAGE CON DOS LOGOS
+% ==========================================
+\begin{titlepage}
+    \centering
+    
+    % Encabezado con los dos logos alineados en los extremos (con verificación de existencia)
+    \begin{minipage}{0.42\textwidth}
+        \begin{center}
+            \IfFileExists{logo-una-puno.png}{%
+                \includegraphics[height=3.2cm, keepaspectratio]{logo-una-puno.png}%
+            }{%
+                \begin{tcolorbox}[colback=brandNavy, colframe=brandBlue, width=3.2cm, height=3.2cm, arc=2mm, halign=center, valign=center, boxrule=1pt]
+                    {\small \bfseries \color{white} LOGO\\UNA-PUNO}
+                \end{tcolorbox}%
+            }
+        \end{center}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.42\textwidth}
+        \begin{center}
+            \IfFileExists{logofinesi.png}{%
+                \includegraphics[height=3.2cm, keepaspectratio]{logofinesi.png}%
+            }{%
+                \begin{tcolorbox}[colback=brandNavy, colframe=brandBlue, width=3.2cm, height=3.2cm, arc=2mm, halign=center, valign=center, boxrule=1pt]
+                    {\small \bfseries \color{white} LOGO\\FINESI}
+                \end{tcolorbox}%
+            }
+        \end{center}
+    \end{minipage}
+
+    \vspace{1.5cm}
+
+    {\Large \bfseries UNIVERSIDAD NACIONAL DEL ALTIPLANO \par}
+    {\large FACULTAD DE INGENIERÍA ESTADÍSTICA E INFORMÁTICA \par}
+
+    \vspace{1.5cm}
+
+    \begin{tcolorbox}[colback=brandNavy, colframe=brandBlue, arc=4mm, width=\textwidth, halign=center, top=8mm, bottom=8mm]
+        {\huge \bfseries \color{white} CAPÍTULO I \par}
+        \vspace{0.3cm}
+        {\Large \color{brandCyan} Solución de Ejercicios de Programación \par}
+    \end{tcolorbox}
+    
+    \vspace{1.2cm}
+    
+    {\huge \bfseries \color{brandNavy} ESTRUCTURA DE DATOS -- 2026 \par}
+    \vspace{0.4cm}
+    \rule{0.8\textwidth}{1.5pt}
+    \vspace{0.8cm}
+    
+    {\Large \textbf{ Docente:} \color{brandBlue} Fred Torres-Cruz \par}
+    {\Large \textbf{ Estudiante:} \color{brandBlue} Blays Kevin Mamani Quispe \par}
+    \vfill
+    
+    \begin{tcolorbox}[colback=codeBg, colframe=brandBlue, arc=3mm, width=0.9\textwidth, halign=left, boxrule=1pt]
+        \textbf{\large Resumen del Capítulo:}
+        \begin{itemize}\setlength{\itemsep}{2pt}
+            \item Ejercicios resueltos en lenguaje C y C++.
+            \item Estructuras secuenciales, condicionales, ciclos y arreglos.
+            \item Modularización mediante funciones y estimación de complejidad algorítmica.
+        \end{itemize}
+    \end{tcolorbox}
+    
+    \vfill
+    
+    {\large \bfseries \color{codeComment} Puno, Perú \par}
+    {\large \color{codeComment} 2026 \par}
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ==========================================
+% DESARROLLO DE EJERCICIOS
+% ==========================================
+
+\section*{Ejercicio 1. Costo total del procesamiento}
+\addcontentsline{toc}{section}{Ejercicio 1. Costo total del procesamiento}
+\textbf{Procedimiento:} Se leen las horas trabajadas y el costo por hora. El costo total se obtiene multiplicando ambos valores.
+
+\begin{codebox}[title={CÓDIGO FUENTE EN C: Ejercicio 1}]
+#include <stdio.h>
+
+int main(void) {
+    float horas, tarifa, costo;
+
+    printf("Ingrese las horas trabajadas: ");
+    scanf("%f", &horas);
+
+    printf("Ingrese el costo por hora: ");
+    scanf("%f", &tarifa);
+
+    costo = horas * tarifa;
+
+    printf("\n--- RESUMEN ---\n");
+    printf("Horas trabajadas: %.2f\n", horas);
+    printf("Tarifa por hora: S/ %.2f\n", tarifa);
+    printf("Costo total: S/ %.2f\n", costo);
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ gcc ejercicio1.c -o ejercicio1
+$ ./ejercicio1
+Ingrese las horas trabajadas: 42.5
+Ingrese el costo por hora: 25.0
+
+--- RESUMEN ---
+Horas trabajadas: 42.50
+Tarifa por hora: S/ 25.00
+Costo total: S/ 1062.50
+\end{terminalout}
+
+\newpage
+
+\section*{Ejercicio 2. Registro de una observación}
+\addcontentsline{toc}{section}{Ejercicio 2. Registro de una observación}
+\textbf{Procedimiento:} Se utilizan tipos de datos apropiados: entero para el identificador y la edad, float para el promedio, char para la categoría y un entero para representar el estado de validez.
+
+\begin{codebox}[title={CÓDIGO FUENTE EN C: Ejercicio 2}]
+#include <stdio.h>
+
+int main(void) {
+    int identificador, edad, valido;
+    float promedio;
+    char categoria;
+
+    printf("Identificador: ");
+    scanf("%d", &identificador);
+
+    printf("Edad: ");
+    scanf("%d", &edad);
+
+    printf("Valor promedio: ");
+    scanf("%f", &promedio);
+
+    printf("Categoria (una letra): ");
+    scanf(" %c", &categoria);
+
+    printf("Registro valido? (1=Si, 0=No): ");
+    scanf("%d", &valido);
+
+    printf("\n--- DATOS DE LA OBSERVACION ---\n");
+    printf("Identificador: %d\n", identificador);
+    printf("Edad: %d\n", edad);
+    printf("Promedio: %.2f\n", promedio);
+    printf("Categoria: %c\n", categoria);
+    printf("Estado: %s\n", valido == 1 ? "Valido" : "No valido");
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ gcc ejercicio2.c -o ejercicio2
+$ ./ejercicio2
+Identificador: 101
+Edad: 30
+Valor promedio: 56.45
+Categoria (una letra): B
+Registro valido? (1=Si, 0=No): 1
+
+--- DATOS DE LA OBSERVACION ---
+Identificador: 101
+Edad: 30
+Promedio: 56.45
+Categoria: B
+Estado: Valido
+\end{terminalout}
+
+\newpage
+
+\section*{Ejercicio 3. Conversión de decimal a entero}
+\addcontentsline{toc}{section}{Ejercicio 3. Conversión de decimal a entero}
+\textbf{Procedimiento:} La conversión explícita mediante \texttt{(int)} elimina la parte decimal, sin redondear. La pérdida se calcula restando el entero convertido al valor original.
+
+\begin{codebox}[title={CÓDIGO FUENTE EN C: Ejercicio 3}]
+#include <stdio.h>
+
+int main(void) {
+    float medicion, perdida;
+    int valorEntero;
+
+    printf("Ingrese la medicion decimal: ");
+    scanf("%f", &medicion);
+
+    valorEntero = (int)medicion;
+    perdida = medicion - valorEntero;
+
+    printf("Valor original: %.2f\n", medicion);
+    printf("Valor entero: %d\n", valorEntero);
+    printf("Parte decimal perdida: %.2f\n", perdida);
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ gcc ejercicio3.c -o ejercicio3
+$ ./ejercicio3
+Ingrese la medicion decimal: 18.9
+
+Valor original: 18.90
+Valor entero: 18
+Parte decimal perdida: 0.90
+\end{terminalout}
+
+\newpage
+
+\section*{Ejercicio 4. Operaciones aritméticas}
+\addcontentsline{toc}{section}{Ejercicio 4. Operaciones aritméticas}
+\textbf{Procedimiento:} Se leen dos enteros y se calculan suma, diferencia, producto, división entera y residuo. Se comprueba que el segundo número no sea cero antes de dividir.
+
+\begin{codebox}[title={CÓDIGO FUENTE EN C: Ejercicio 4}]
+#include <stdio.h>
+
+int main(void) {
+    int a, b;
+
+    printf("Ingrese el primer entero: ");
+    scanf("%d", &a);
+
+    printf("Ingrese el segundo entero: ");
+    scanf("%d", &b);
+
+    printf("\nSuma: %d\n", a + b);
+    printf("Diferencia: %d\n", a - b);
+    printf("Producto: %d\n", a * b);
+
+    if (b != 0) {
+        printf("Division entera: %d\n", a / b);
+        printf("Residuo: %d\n", a % b);
+    } else {
+        printf("No se puede dividir entre cero.\n");
+    }
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ gcc ejercicio4.c -o ejercicio4
+$ ./ejercicio4
+Ingrese el primer entero: 150
+Ingrese el segundo entero: 12
+
+Suma: 162
+Diferencia: 138
+Producto: 1800
+Division entera: 12
+Residuo: 6
+\end{terminalout}
+
+\newpage
+
+\section*{Ejercicio 5. Distribución de registros entre nodos}
+\addcontentsline{toc}{section}{Ejercicio 5. Distribución de registros entre nodos}
+\textbf{Procedimiento:} La división entera determina los registros asignados a cada nodo y el operador módulo determina los registros sobrantes.
+
+\begin{codebox}[title={CÓDIGO FUENTE EN C: Ejercicio 5}]
+#include <stdio.h>
+
+int main(void) {
+    int registros, nodos;
+
+    printf("Numero total de registros: ");
+    scanf("%d", &registros);
+
+    printf("Numero de nodos: ");
+    scanf("%d", &nodos);
+
+    if (registros >= 0 && nodos > 0) {
+        printf("Registros por nodo: %d\n", registros / nodos);
+        printf("Registros sin distribuir: %d\n", registros % nodos);
+    } else {
+        printf("Ingrese registros no negativos y nodos mayores que cero.\n");
+    }
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ gcc ejercicio5.c -o ejercicio5
+$ ./ejercicio5
+Numero total de registros: 1053
+Numero de nodos: 8
+
+Registros por nodo: 131
+Registros sin distribuir: 5
+\end{terminalout}
+
+\newpage
+
+\section*{Ejercicio 6. Operadores de incremento y asignación}
+\addcontentsline{toc}{section}{Ejercicio 6. Operadores de incremento y asignación}
+\textbf{Procedimiento:} La variable inicia en 4, luego aumenta en 3 y finalmente se multiplica por 2.
+
+\begin{codebox}[title={CÓDIGO FUENTE EN C: Ejercicio 6}]
+#include <stdio.h>
+
+int main(void) {
+    int registros = 4;
+
+    printf("Valor inicial: %d\n", registros);
+
+    registros += 3;
+    printf("Despues de incrementar en 3: %d\n", registros);
+
+    registros *= 2;
+    printf("Despues de duplicar: %d\n", registros);
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ gcc ejercicio6.c -o ejercicio6
+$ ./ejercicio6
+Valor inicial: 4
+Despues de incrementar en 3: 7
+Despues de duplicar: 14
+\end{terminalout}
+
+\newpage
+
+\section*{Ejercicio 7. Validación de un conjunto de datos}
+\addcontentsline{toc}{section}{Ejercicio 7. Validación de un conjunto de datos}
+\textbf{Procedimiento:} El conjunto se acepta únicamente si tiene al menos 100 observaciones válidas y un porcentaje de datos completos igual o superior al 70\%. Ambas condiciones deben cumplirse.
+
+\begin{codebox}[title={CÓDIGO FUENTE EN C: Ejercicio 7}]
+#include <stdio.h>
+
+int main(void) {
+    int observaciones;
+    float porcentaje;
+
+    printf("Numero de observaciones validas: ");
+    scanf("%d", &observaciones);
+
+    printf("Porcentaje de datos completos: ");
+    scanf("%f", &porcentaje);
+
+    if (observaciones >= 100 && porcentaje >= 70.0 && porcentaje <= 100.0) {
+        printf("El conjunto de datos puede ser analizado.\n");
+    } else {
+        printf("El conjunto de datos no cumple las condiciones.\n");
+    }
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ gcc ejercicio7.c -o ejercicio7
+$ ./ejercicio7
+Numero de observaciones validas: 125
+Porcentaje de datos completos: 82.5
+
+El conjunto de datos puede ser analizado.
+\end{terminalout}
+
+\newpage
+
+\section*{Ejercicio 8. Validación de una observación}
+\addcontentsline{toc}{section}{Ejercicio 8. Validación de una observación}
+\textbf{Procedimiento:} Se utiliza el operador lógico AND (\texttt{\&\&}). La observación se incorpora si la edad es como mínimo 18 y el registro está validado.
+
+\begin{codebox}[title={CÓDIGO FUENTE EN C: Ejercicio 8}]
+#include <stdio.h>
+
+int main(void) {
+    int edad, validado;
+
+    printf("Ingrese la edad: ");
+    scanf("%d", &edad);
+
+    printf("Registro validado? (1=Si, 0=No): ");
+    scanf("%d", &validado);
+
+    if (edad >= 18 && validado == 1) {
+        printf("La observacion puede incorporarse.\n");
+    } else {
+        printf("La observacion no puede incorporarse.\n");
+    }
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ gcc ejercicio8.c -o ejercicio8
+$ ./ejercicio8
+Ingrese la edad: 22
+Registro validado? (1=Si, 0=No): 1
+
+La observacion puede incorporarse.
+\end{terminalout}
+
+\newpage
+
+\section*{Ejercicio 9. Clasificación de temperatura}
+\addcontentsline{toc}{section}{Ejercicio 9. Clasificación de temperatura}
+\textbf{Procedimiento:} Se utilizan condiciones encadenadas para clasificar la temperatura en tres categorías.
+
+\begin{codebox}[title={CÓDIGO FUENTE EN C: Ejercicio 9}]
+#include <stdio.h>
+
+int main(void) {
+    float temperatura;
+
+    printf("Ingrese la temperatura en grados Celsius: ");
+    scanf("%f", &temperatura);
+
+    if (temperatura < 0) {
+        printf("Clasificacion: Congelacion\n");
+    } else if (temperatura <= 20) {
+        printf("Clasificacion: Frio\n");
+    } else {
+        printf("Clasificacion: Templado\n");
+    }
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ gcc ejercicio9.c -o ejercicio9
+$ ./ejercicio9
+Ingrese la temperatura en grados Celsius: 14.5
+Clasificacion: Frio
+\end{terminalout}
+
+\newpage
+
+\section*{Ejercicio 10. Media y observaciones superiores a ella (C++)}
+\addcontentsline{toc}{section}{Ejercicio 10. Media y observaciones superiores a ella (C++)}
+\textbf{Procedimiento:} Se almacenan diez mediciones en un arreglo y se calcula su suma. La media se obtiene dividiendo la suma entre diez. Después se cuentan los valores mayores que la media.
+
+\begin{codebox}[title={CÓDIGO FUENTE EN C++: Ejercicio 10}]
+#include <iostream>
+using namespace std;
+
+int main() {
+    double datos[10], suma = 0, media;
+    int contador = 0;
+
+    for (int i = 0; i < 10; i++) {
+        cout << "Ingrese la medicion " << i + 1 << ": ";
+        cin >> datos[i];
+        suma += datos[i];
+    }
+
+    media = suma / 10;
+
+    for (int i = 0; i < 10; i++) {
+        if (datos[i] > media) {
+            contador++;
+        }
+    }
+
+    cout << "Media aritmetica: " << media << endl;
+    cout << "Observaciones por encima de la media: " << contador << endl;
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ g++ ejercicio10.cpp -o ejercicio10
+$ ./ejercicio10
+Ingrese la medicion 1: 12.5
+Ingrese la medicion 2: 18.0
+Ingrese la medicion 3: 9.2
+... [ingreso de mediciones] ...
+Media aritmetica: 14.82
+Observaciones por encima de la media: 4
+\end{terminalout}
+
+\newpage
+
+\section*{Ejercicio 11. Validación de contraseña (C++)}
+\addcontentsline{toc}{section}{Ejercicio 11. Validación de contraseña (C++)}
+\textbf{Procedimiento:} El ciclo \texttt{while} solicita la clave hasta que sea correcta. Se incrementa el contador cada vez que se realiza un intento. Para este ejemplo, la clave correcta se establece en 1234.
+
+\begin{codebox}[title={CÓDIGO FUENTE EN C++: Ejercicio 11}]
+#include <iostream>
+using namespace std;
+
+int main() {
+    const int CLAVE_CORRECTA = 1234;
+    int clave, intentos = 0;
+
+    cout << "Ingrese la clave numerica: ";
+    cin >> clave;
+    intentos++;
+
+    while (clave != CLAVE_CORRECTA) {
+        cout << "Clave incorrecta. Intente nuevamente.\n";
+        cout << "Ingrese la clave numerica: ";
+        cin >> clave;
+        intentos++;
+    }
+
+    cout << "Acceso permitido.\n";
+    cout << "Numero de intentos: " << intentos << endl;
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ g++ ejercicio11.cpp -o ejercicio11
+$ ./ejercicio11
+Ingrese la clave numerica: 1111
+Clave incorrecta. Intente nuevamente.
+Ingrese la clave numerica: 1234
+Acceso permitido.
+Numero de intentos: 2
+\end{terminalout}
+
+\newpage
+
+\section*{Ejercicio 12. Procesamiento con break y continue (C++)}
+\addcontentsline{toc}{section}{Ejercicio 12. Procesamiento con break y continue (C++)}
+\textbf{Procedimiento:} Se leen como máximo diez valores. Los negativos se omiten con \texttt{continue}; el valor 999 detiene el ciclo con \texttt{break}.
+
+\begin{codebox}[title={CÓDIGO FUENTE EN C++: Ejercicio 12}]
+#include <iostream>
+using namespace std;
+
+int main() {
+    double valor;
+    int validos = 0;
+
+    for (int i = 0; i < 10; i++) {
+        cout << "Ingrese la medicion " << i + 1 << " (999 para terminar): ";
+        cin >> valor;
+
+        if (valor == 999) {
+            break;
+        }
+
+        if (valor < 0) {
+            cout << "Valor negativo: se omite.\n";
+            continue;
+        }
+
+        validos++;
+    }
+
+    cout << "Valores validos procesados: " << validos << endl;
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ g++ ejercicio12.cpp -o ejercicio12
+$ ./ejercicio12
+Ingrese la medicion 1 (999 para terminar): 15.4
+Ingrese la medicion 2 (999 para terminar): -3.2
+Valor negativo: se omite.
+Ingrese la medicion 3 (999 para terminar): 999
+Valores validos procesados: 1
+\end{terminalout}
+
+\newpage
+
+\section*{Ejercicio 13. Análisis de edades mediante un arreglo}
+\addcontentsline{toc}{section}{Ejercicio 13. Análisis de edades mediante un arreglo}
+\textbf{Procedimiento:} Se almacenan diez edades. Durante el ingreso se determina la suma, la edad mínima y la máxima. Después se calcula la media y se cuentan las edades superiores a ella.
+
+\begin{codebox}[title={CÓDIGO FUENTE EN C: Ejercicio 13}]
+#include <stdio.h>
+
+int main(void) {
+    int edades[10], suma = 0;
+    int minima, maxima, superiores = 0;
+    float media;
+
+    for (int i = 0; i < 10; i++) {
+        printf("Edad del participante %d: ", i + 1);
+        scanf("%d", &edades[i]);
+
+        if (i == 0) {
+            minima = maxima = edades[i];
+        } else {
+            if (edades[i] < minima) minima = edades[i];
+            if (edades[i] > maxima) maxima = edades[i];
+        }
+
+        suma += edades[i];
+    }
+
+    media = (float)suma / 10;
+
+    for (int i = 0; i < 10; i++) {
+        if (edades[i] > media) {
+            superiores++;
+        }
+    }
+
+    printf("\nEdad minima: %d\n", minima);
+    printf("Edad maxima: %d\n", maxima);
+    printf("Media de edades: %.2f\n", media);
+    printf("Participantes por encima de la media: %d\n", superiores);
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ gcc ejercicio13.c -o ejercicio13
+$ ./ejercicio13
+Edad minima: 19
+Edad maxima: 45
+Media de edades: 28.40
+Participantes por encima de la media: 4
+\end{terminalout}
+
+\newpage
+
+\section*{Ejercicio 14. Comparación de complejidad \texorpdfstring{$O(n)$}{O(n)} y \texorpdfstring{$O(n^2)$}{O(n^2)}}
+\addcontentsline{toc}{section}{Ejercicio 14. Comparación de complejidad O(n) y O(n2)}
+\textbf{Procedimiento:} El primer procedimiento ejecuta una operación por cada elemento, por lo que realiza $n$ operaciones. El segundo ejecuta dos ciclos anidados de $n$ iteraciones cada uno, realizando $n^2$ operaciones.
+
+\begin{codebox}[title={CÓDIGO FUENTE EN C: Ejercicio 14}]
+#include <stdio.h>
+
+int main(void) {
+    int n;
+    long long operacionesLineales = 0;
+    long long operacionesCuadraticas = 0;
+
+    printf("Ingrese el numero de elementos: ");
+    scanf("%d", &n);
+
+    if (n <= 0) {
+        printf("n debe ser un entero positivo.\n");
+        return 1;
+    }
+
+    /* Procedimiento 1: un recorrido */
+    for (int i = 0; i < n; i++) {
+        operacionesLineales++;
+    }
+
+    /* Procedimiento 2: dos ciclos anidados */
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            operacionesCuadraticas++;
+        }
+    }
+
+    printf("Operaciones del primer procedimiento: %lld\n", operacionesLineales);
+    printf("Complejidad aproximada: O(n)\n");
+
+    printf("Operaciones del segundo procedimiento: %lld\n", operacionesCuadraticas);
+    printf("Complejidad aproximada: O(n^2)\n");
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ gcc ejercicio14.c -o ejercicio14
+$ ./ejercicio14
+Ingrese el numero de elementos: 500
+Operaciones del primer procedimiento: 500
+Complejidad aproximada: O(n)
+Operaciones del segundo procedimiento: 250000
+Complejidad aproximada: O(n^2)
+\end{terminalout}
+
+\newpage
+
+\section*{Ejercicio 15. Funciones para promedio y conteo}
+\addcontentsline{toc}{section}{Ejercicio 15. Funciones para promedio y conteo}
+\textbf{Procedimiento:} La función \texttt{calcular\_promedio} recibe tres mediciones y retorna su media. La función \texttt{contar\_superiores} recibe las mediciones y el promedio, retornando cuántas superan dicho promedio.
+
+\begin{codebox}[title={CÓDIGO FUENTE EN C: Ejercicio 15}]
+#include <stdio.h>
+
+float calcular_promedio(float a, float b, float c) {
+    return (a + b + c) / 3.0f;
+}
+
+int contar_superiores(float a, float b, float c, float promedio) {
+    int contador = 0;
+
+    if (a > promedio) contador++;
+    if (b > promedio) contador++;
+    if (c > promedio) contador++;
+
+    return contador;
+}
+
+int main(void) {
+    float m1, m2, m3, promedio;
+    int cantidad;
+
+    printf("Ingrese la primera medicion: ");
+    scanf("%f", &m1);
+
+    printf("Ingrese la segunda medicion: ");
+    scanf("%f", &m2);
+
+    printf("Ingrese la tercera medicion: ");
+    scanf("%f", &m3);
+
+    promedio = calcular_promedio(m1, m2, m3);
+    cantidad = contar_superiores(m1, m2, m3, promedio);
+
+    printf("Promedio: %.2f\n", promedio);
+    printf("Mediciones por encima del promedio: %d\n", cantidad);
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ gcc ejercicio15.c -o ejercicio15
+$ ./ejercicio15
+Ingrese la primera medicion: 14.2
+Ingrese la segunda medicion: 18.6
+Ingrese la tercera medicion: 11.0
+Promedio: 14.60
+Mediciones por encima del promedio: 1
+\end{terminalout}
+
+\newpage
+
+% CONCLUSION
+\section*{Conclusión}
+\addcontentsline{toc}{section}{Conclusión}
+
+Los ejercicios desarrollan conceptos fundamentales de programación: variables y tipos de datos, conversiones, operadores aritméticos y lógicos, estructuras condicionales, ciclos, arreglos, funciones y análisis básico de complejidad algorítmica.
+
+Cada programa puede compilarse de manera independiente en Overleaf o cualquier compilador de C/C++.
+
+\end{document}
