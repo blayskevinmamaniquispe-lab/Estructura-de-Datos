@@ -1,0 +1,578 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[a4paper, margin=2cm]{geometry}
+\usepackage[spanish]{babel}
+\usepackage{lmodern}
+\usepackage[scaled=0.95]{helvet}
+\usepackage{courier}
+
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, listings}
+\usepackage{hyperref}
+
+% ==========================================
+% PALETA DE COLORES DE ALTO CONTRASTE
+% ==========================================
+\definecolor{brandNavy}{RGB}{15, 23, 42}       % Deep Navy Dark
+\definecolor{brandBlue}{RGB}{37, 99, 235}      % Vibrant Blue Accent
+\definecolor{brandCyan}{RGB}{14, 165, 233}     % Cyan Light Accent
+\definecolor{codeBg}{RGB}{248, 250, 252}        % Canvas Soft Light Gray
+\definecolor{codeFrame}{RGB}{203, 213, 225}     % Border Slate Gray
+\definecolor{codeComment}{RGB}{100, 116, 139}   % Muted Comment Text
+\definecolor{codeKeyword}{RGB}{3, 105, 161}     % Deep Teal-Blue Keyword
+\definecolor{codeString}{RGB}{180, 83, 9}       % Warm Amber String
+\definecolor{termBg}{RGB}{15, 23, 42}          % Dark Terminal Canvas
+\definecolor{termBorder}{RGB}{30, 41, 59}      % Terminal Border
+\definecolor{termFg}{RGB}{241, 245, 249}        % Terminal Text Light
+\definecolor{boxTitleBg}{RGB}{30, 58, 138}     % Box Header Dark Blue
+
+% ==========================================
+% CONFIGURACIÓN DE LISTINGS Y TCOLORBOX
+% ==========================================
+\lstdefinestyle{codigo}{
+  language=C++,
+  basicstyle=\small\ttfamily\color{brandNavy},
+  keywordstyle=\bfseries\color{codeKeyword},
+  stringstyle=\color{codeString},
+  commentstyle=\itshape\color{codeComment},
+  numbers=left,
+  numberstyle=\tiny\bfseries\color{codeComment},
+  stepnumber=1,
+  numbersep=10pt,
+  showstringspaces=false,
+  breaklines=true,
+  tabsize=2
+}
+
+\newtcblisting{codebox}[1][]{
+  toptitle=2mm,
+  bottomtitle=2mm,
+  colback=codeBg,
+  colframe=brandBlue,
+  coltitle=white,
+  fonttitle=\bfseries\small\sffamily,
+  enhanced,
+  attach boxed title to top left={xshift=5mm, yshift=-3mm},
+  boxed title style={colback=brandBlue, arc=2mm},
+  arc=3mm,
+  boxrule=1.2pt,
+  breakable,
+  listing only,
+  listing engine=listings,
+  listing options={style=codigo},
+  #1
+}
+
+\newtcblisting{terminalout}[1][]{
+  toptitle=2mm,
+  bottomtitle=2mm,
+  colback=termBg,
+  colframe=termBorder,
+  colupper=termFg,
+  fontupper=\small\ttfamily,
+  fonttitle=\bfseries\small\sffamily,
+  title={> COMPILACIÓN Y EJECUCIÓN EN CONSOLA},
+  coltitle=white,
+  enhanced,
+  attach boxed title to top left={xshift=5mm, yshift=-3mm},
+  boxed title style={colback=boxTitleBg, arc=2mm},
+  arc=3mm,
+  boxrule=1.2pt,
+  breakable,
+  listing only,
+  listing options={
+    basicstyle=\small\ttfamily\color{termFg},
+    breaklines=true,
+    showstringspaces=false
+  },
+  #1
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=brandBlue,
+    urlcolor=brandBlue,
+    pdftitle={Ejercicios de Pilas (Stack) en C++ - FINESI},
+    pdfauthor={Fred Torres Cruz}
+}
+
+\begin{document}
+
+% ==========================================
+% PORTADA CON LOGOS
+% ==========================================
+\begin{titlepage}
+    \centering
+    
+    % Logos alineados horizontalmente con comprobación de existencia
+    \begin{minipage}{0.42\textwidth}
+        \begin{center}
+            \IfFileExists{logo-una-puno.png}{%
+                \includegraphics[height=3.2cm, keepaspectratio]{logo-una-puno.png}%
+            }{%
+                \begin{tcolorbox}[colback=brandNavy, colframe=brandBlue, width=3.2cm, height=3.2cm, arc=2mm, halign=center, valign=center, boxrule=1pt]
+                    {\small \bfseries \color{white} LOGO\\UNA-PUNO}
+                \end{tcolorbox}%
+            }
+        \end{center}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.42\textwidth}
+        \begin{center}
+            \IfFileExists{logofinesi.png}{%
+                \includegraphics[height=3.2cm, keepaspectratio]{logofinesi.png}%
+            }{%
+                \begin{tcolorbox}[colback=brandNavy, colframe=brandBlue, width=3.2cm, height=3.2cm, arc=2mm, halign=center, valign=center, boxrule=1pt]
+                    {\small \bfseries \color{white} LOGO\\FINESI}
+                \end{tcolorbox}%
+            }
+        \end{center}
+    \end{minipage}
+
+    \vspace{1.2cm}
+
+    {\Large \bfseries UNIVERSIDAD NACIONAL DEL ALTIPLANO \par}
+    {\large FACULTAD DE INGENIERÍA ESTADÍSTICA E INFORMÁTICA \par}
+
+    \vspace{1.2cm}
+
+    \begin{tcolorbox}[colback=brandNavy, colframe=brandBlue, arc=4mm, width=\textwidth, halign=center, top=8mm, bottom=8mm]
+        {\huge \bfseries \color{white} EJERCICIOS DE PILAS (STACK) \par}
+        \vspace{0.3cm}
+        {\Large \color{brandCyan} Práctica Introductoria -- Principio LIFO y Operaciones Básicas \par}
+    \end{tcolorbox}
+    
+    \vspace{1.0cm}
+    
+    {\huge \bfseries \color{brandNavy} ESTRUCTURA DE DATOS \par}
+    \vspace{0.4cm}
+    \rule{0.8\textwidth}{1.5pt}
+    \vspace{0.8cm}
+    
+    {\Large \textbf{Docente:} \color{brandBlue} Fred Torres Cruz \par}
+    {\Large \textbf{ Estudiante:} \color{brandBlue} Blays Kevin Mamani Quispe \par} {\Large \textbf{ Link de Repositorio GitHub:} \color{brandBlue} https://github.com/blayskevinmamaniquispe-lab/Estructura-de-Datos/tree/main/Ejerccicios%20-%20Estructuras%20b%C3%A1sicas. \par} \vfill
+    \vfill
+    
+    \begin{tcolorbox}[colback=codeBg, colframe=brandBlue, arc=3mm, width=0.95\textwidth, halign=left, boxrule=1pt]
+        \textbf{\large Indicaciones Generales:}
+        \begin{itemize}\setlength{\itemsep}{3pt}
+            \item Resuelva los ejercicios utilizando la estructura \texttt{std::stack} de C++.
+            \item Identifique en todo momento el elemento ubicado en el \textbf{TOPE}.
+            \item Observe y compruebe el comportamiento \textbf{LIFO} (\textit{Last In, First Out}).
+        \end{itemize}
+    \end{tcolorbox}
+    
+    \vfill
+    
+    {\large \bfseries \color{codeComment} Puno, Perú \par}
+    {\large \color{codeComment} 2026 \par}
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ==========================================
+% CONCEPTO CLAVE Y PLANTILLA BASE
+% ==========================================
+\section*{Introducción: El Principio LIFO y Plantilla Base}
+\addcontentsline{toc}{section}{Introducción: El Principio LIFO y Plantilla Base}
+
+En una estructura de datos tipo \textbf{Pila (Stack)}, los elementos se agregan y remueven siguiendo el principio \textbf{LIFO} (\textit{Last In, First Out} -- Último en entrar, primero en salir).
+
+\begin{center}
+    \begin{tcolorbox}[colback=brandNavy, colframe=brandBlue, width=0.7\textwidth, halign=center]
+        {\Large \color{white} \textbf{TOPE} $\rightarrow$ \textbf{30} \quad 20 \quad 10} \par
+        \vspace{2mm}
+        {\small \color{brandCyan} Idea clave: si se insertaron 10, 20 y 30, el primero en salir será 30.}
+    \end{tcolorbox}
+\end{center}
+
+\subsection*{Plantilla Base en C++}
+
+El siguiente código constituye la estructura mínima con \texttt{std::stack}:
+
+\begin{codebox}[title={PLANTILLA BASE EN C++}]
+#include <iostream>
+#include <stack>
+using namespace std;
+
+int main() {
+    stack<int> pila;
+
+    pila.push(10);
+    pila.push(20);
+    pila.push(30);
+
+    while (!pila.empty()) {
+        cout << pila.top() << " ";
+        pila.pop();
+    }
+
+    cout << endl;
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ g++ plantilla.cpp -o plantilla
+$ ./plantilla
+30 20 10
+\end{terminalout}
+
+\newpage
+
+% ==========================================
+% EJERCICIO 1
+% ==========================================
+\section*{Ejercicio 1. Apilar números enteros}
+\addcontentsline{toc}{section}{Ejercicio 1. Apilar números enteros}
+
+\textbf{Enunciado:} Crear un programa que permita ingresar 5 números enteros y almacenarlos en una pila. Luego, retirar y mostrar los elementos uno por uno hasta dejar la pila vacía. El orden de salida debe permitir comprobar el funcionamiento LIFO.
+
+\textbf{Condición:} Use las operaciones \texttt{push()}, \texttt{top()}, \texttt{pop()} y \texttt{empty()}.
+
+\begin{codebox}[title={CÓDIGO FUENTE: Ejercicio 1}]
+#include <iostream>
+#include <stack>
+
+using namespace std;
+
+int main() {
+    stack<int> pila;
+    int numero;
+
+    cout << "--- INGRESO DE 5 NÚMEROS ENTEROS ---\n";
+    for (int i = 1; i <= 5; i++) {
+        cout << "Ingrese el numero " << i << ": ";
+        cin >> numero;
+        pila.push(numero);
+    }
+
+    cout << "\n--- DESAPILANDO ELEMENTOS (ORDEN LIFO) ---\n";
+    while (!pila.empty()) {
+        cout << "Elemento en el TOPE: " << pila.top() << endl;
+        pila.pop();
+    }
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ g++ ejercicio1.cpp -o ejercicio1
+$ ./ejercicio1
+--- INGRESO DE 5 NÚMEROS ENTEROS ---
+Ingrese el numero 1: 4
+Ingrese el numero 2: 8
+Ingrese el numero 3: 12
+Ingrese el numero 4: 16
+Ingrese el numero 5: 20
+
+--- DESAPILANDO ELEMENTOS (ORDEN LIFO) ---
+Elemento en el TOPE: 20
+Elemento en el TOPE: 16
+Elemento en el TOPE: 12
+Elemento en el TOPE: 8
+Elemento en el TOPE: 4
+\end{terminalout}
+
+\newpage
+
+% ==========================================
+% EJERCICIO 2
+% ==========================================
+\section*{Ejercicio 2. Invertir una palabra}
+\addcontentsline{toc}{section}{Ejercicio 2. Invertir una palabra}
+
+\textbf{Enunciado:} Leer una palabra ingresada por el usuario. Insertar cada carácter en una pila y, posteriormente, desapilar los caracteres para construir y mostrar la palabra en orden inverso.
+
+\textbf{Condición:} Analice por qué una pila permite invertir naturalmente el orden de los elementos.
+
+\begin{codebox}[title={CÓDIGO FUENTE: Ejercicio 2}]
+#include <iostream>
+#include <stack>
+#include <string>
+
+using namespace std;
+
+int main() {
+    stack<char> pilaCaracteres;
+    string palabra;
+
+    cout << "Ingrese una palabra: ";
+    cin >> palabra;
+
+    // Apilar cada carácter de la palabra
+    for (char c : palabra) {
+        pilaCaracteres.push(c);
+    }
+
+    string palabraInvertida = "";
+
+    // Desapilar caracteres para revertir el orden
+    while (!pilaCaracteres.empty()) {
+        palabraInvertida += pilaCaracteres.top();
+        pilaCaracteres.pop();
+    }
+
+    cout << "\nPalabra original: " << palabra << endl;
+    cout << "Palabra invertida: " << palabraInvertida << endl;
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ g++ ejercicio2.cpp -o ejercicio2
+$ ./ejercicio2
+Ingrese una palabra: DATOS
+
+Palabra original: DATOS
+Palabra invertida: SOTAD
+\end{terminalout}
+
+\newpage
+
+% ==========================================
+% EJERCICIO 3
+% ==========================================
+\section*{Ejercicio 3. Verificar paréntesis balanceados}
+\addcontentsline{toc}{section}{Ejercicio 3. Verificar paréntesis balanceados}
+
+\textbf{Enunciado:} Crear un programa que determine si una expresión tiene sus paréntesis correctamente balanceados. Cada vez que aparezca un paréntesis de apertura \texttt{(}, se almacena en la pila. Cuando aparezca \texttt{)}, se comprueba que exista una apertura pendiente.
+
+\textbf{Condición:} La expresión será correcta únicamente si nunca se intenta cerrar un paréntesis inexistente y la pila queda vacía al finalizar.
+
+\begin{codebox}[title={CÓDIGO FUENTE: Ejercicio 3}]
+#include <iostream>
+#include <stack>
+#include <string>
+
+using namespace std;
+
+bool estaBalanceado(const string& expresion) {
+    stack<char> pila;
+
+    for (char c : expresion) {
+        if (c == '(') {
+            pila.push(c);
+        } else if (c == ')') {
+            if (pila.empty()) {
+                return false; // Intento de cerrar paréntesis sin apertura
+            }
+            pila.pop();
+        }
+    }
+
+    return pila.empty(); // Es correcto si no quedan aperturas pendientes
+}
+
+int main() {
+    string expresion;
+
+    cout << "Ingrese la expresion matematica: ";
+    cin >> expresion;
+
+    if (estaBalanceado(expresion)) {
+        cout << "Resultado: La expresion esta CORRECTAMENTE balanceada." << endl;
+    } else {
+        cout << "Resultado: La expresion esta INCORRECTAMENTE balanceada." << endl;
+    }
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ g++ ejercicio3.cpp -o ejercicio3
+$ ./ejercicio3
+Ingrese la expresion matematica: (a+b)*(c-d)
+Resultado: La expresion esta CORRECTAMENTE balanceada.
+
+$ ./ejercicio3
+Ingrese la expresion matematica: ((a+b)
+Resultado: La expresion esta INCORRECTAMENTE balanceada.
+\end{terminalout}
+
+\newpage
+
+% ==========================================
+% EJERCICIO 4
+% ==========================================
+\section*{Ejercicio 4. Historial de acciones -- Deshacer (Undo)}
+\addcontentsline{toc}{section}{Ejercicio 4. Historial de acciones -- Deshacer (Undo)}
+
+\textbf{Enunciado:} Simular la función Deshacer de un editor. Cada acción realizada por el usuario se almacena en una pila. Cuando se solicite deshacer, el programa debe mostrar y eliminar la última acción registrada.
+
+\textbf{Condición:} Incluya una opción para mostrar cuál es la acción actualmente ubicada en el tope de la pila.
+
+\begin{codebox}[title={CÓDIGO FUENTE: Ejercicio 4}]
+#include <iostream>
+#include <stack>
+#include <string>
+
+using namespace std;
+
+int main() {
+    stack<string> historial;
+    int opcion;
+    string accion;
+
+    do {
+        cout << "\n--- EDITOR DE TEXTO (DESHACER) ---\n";
+        cout << "1. Realizar nueva accion\n";
+        cout << "2. Ver accion en el TOPE\n";
+        cout << "3. Deshacer (Undo)\n";
+        cout << "4. Salir\n";
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
+        cin.ignore();
+
+        switch (opcion) {
+            case 1:
+                cout << "Ingrese la accion realizada: ";
+                getline(cin, accion);
+                historial.push(accion);
+                cout << "Accion registrada con exito.\n";
+                break;
+            case 2:
+                if (!historial.empty()) {
+                    cout << "TOPE actual: \"" << historial.top() << "\"\n";
+                } else {
+                    cout << "El historial esta vacio.\n";
+                }
+                break;
+            case 3:
+                if (!historial.empty()) {
+                    cout << "Deshaciendo accion: \"" << historial.top() << "\"\n";
+                    historial.pop();
+                } else {
+                    cout << "No hay acciones para deshacer.\n";
+                }
+                break;
+            case 4:
+                cout << "Saliendo del simulador...\n";
+                break;
+            default:
+                cout << "Opcion no valida.\n";
+        }
+    } while (opcion != 4);
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ g++ ejercicio4.cpp -o ejercicio4
+$ ./ejercicio4
+--- EDITOR DE TEXTO (DESHACER) ---
+1. Realizar nueva accion
+2. Ver accion en el TOPE
+3. Deshacer (Undo)
+4. Salir
+Seleccione una opcion: 1
+Ingrese la accion realizada: escribir texto
+
+Seleccione una opcion: 1
+Ingrese la accion realizada: eliminar palabra
+
+Seleccione una opcion: 2
+TOPE actual: "eliminar palabra"
+
+Seleccione una opcion: 3
+Deshaciendo accion: "eliminar palabra"
+\end{terminalout}
+
+\newpage
+
+% ==========================================
+% EJERCICIO 5
+% ==========================================
+\section*{Ejercicio 5. Conversión de decimal a binario}
+\addcontentsline{toc}{section}{Ejercicio 5. Conversión de decimal a binario}
+
+\textbf{Enunciado:} Leer un número entero decimal positivo y convertirlo a binario dividiendo repetidamente entre 2 y almacenando el residuo en la pila. Finalmente, desapilar los residuos para obtener el número en el orden correcto.
+
+\textbf{Condición:} No utilice funciones directas de conversión a binario; la solución debe evidenciar el uso de la pila.
+
+\begin{codebox}[title={CÓDIGO FUENTE: Ejercicio 5}]
+#include <iostream>
+#include <stack>
+
+using namespace std;
+
+int main() {
+    stack<int> residuos;
+    int numeroDecimal;
+
+    cout << "Ingrese un numero entero decimal positivo: ";
+    cin >> numeroDecimal;
+
+    if (numeroDecimal < 0) {
+        cout << "Por favor ingrese un numero positivo." << endl;
+        return 1;
+    }
+
+    if (numeroDecimal == 0) {
+        cout << "Binario: 0" << endl;
+        return 0;
+    }
+
+    int aux = numeroDecimal;
+    while (aux > 0) {
+        residuos.push(aux % 2);
+        aux /= 2;
+    }
+
+    cout << "Numero decimal: " << numeroDecimal << endl;
+    cout << "Representacion en binario: ";
+    while (!residuos.empty()) {
+        cout << residuos.top();
+        residuos.pop();
+    }
+    cout << endl;
+
+    return 0;
+}
+\end{codebox}
+
+\begin{terminalout}
+$ g++ ejercicio5.cpp -o ejercicio5
+$ ./ejercicio5
+Ingrese un numero entero decimal positivo: 13
+Numero decimal: 13
+Representacion en binario: 1101
+\end{terminalout}
+
+\newpage
+
+% ==========================================
+% PREGUNTA DE CIERRE
+% ==========================================
+\section*{Pregunta de Cierre y Análisis}
+\addcontentsline{toc}{section}{Pregunta de Cierre y Análisis}
+
+\begin{tcolorbox}[colback=codeBg, colframe=brandBlue, arc=3mm, width=\textwidth, boxrule=1.2pt]
+    \textbf{\Large ¿Qué característica común tienen los cinco problemas que hace apropiado utilizar una pila?}
+\end{tcolorbox}
+
+\vspace{0.4cm}
+
+\textbf{Respuesta y Justificación Técnica:}
+
+La característica común fundamental es el **requerimiento de un procesamiento en orden inverso al de llegada**, donde el **último elemento procesado o ingresado es el primero en ser atendido o recuperado** (Principio \textbf{LIFO} -- \textit{Last In, First Out}).
+
+\begin{enumerate}\setlength{\itemsep}{6pt}
+ \item **Inversión de Secuencias (Ejercicios 1 y 2):** Para desapilar números o una palabra de forma invertida, el carácter/número ingresado en último lugar debe salir primero.
+    \item **Anidamiento y Pareo de Simetría (Ejercicio 3):** Al validar paréntesis, el último paréntesis de apertura encontrado es siempre el primero que debe cerrarse con uno de cierre.
+    \item **Deshacer Operaciones en Cascada (Ejercicio 4):** En un historial de acciones, la última acción realizada por el usuario es siempre la primera que se debe revertir.
+    \item **Reconstrucción del Orden Correcto (Ejercicio 5):** Los residuos binarios se generan del bit menos significativo (LSB) al más significativo (MSB); desapilarlos permite imprimir el número en la lectura correcta de izquierda a derecha.
+\end{enumerate}
+
+\end{document}
